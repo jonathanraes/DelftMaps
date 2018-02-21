@@ -1,0 +1,49 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.3593, 52.011]
+      },
+      "properties": {
+        "name": "Exhibit 1",
+        "info": "ALEX <br> Hi, hi, hi there, Mr. Deltoid, <br/> funny surprise to see you here."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.37, 52.011]
+      },
+      "properties": {
+        "name": "Exhibit 2",
+        "info": "DELTOID<br>Ah, Alex boy, awake at last, yes? I met your mother on the way to work, yes? She gave me the key. She said something about a pain somewhere... hence not at school , yes?"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.36, 52.015]
+      },
+      "properties": {
+        "name": "Exhibit 3",
+        "info": "ALEX<br>A rather intolerable pain in the head, brother, sir. I think it should be clear by this afterlunch."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.352, 52.013]
+      },
+      "properties": {
+        "name": "Exhibit 4",
+        "info": "DELTOID<br>Oh, or certainly by this evening, yes? The evening's a great time, isn't it, Alex boy?"
+      }
+    }
+  ]
+}
