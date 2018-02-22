@@ -1,0 +1,17 @@
+[Unit]
+Description=DelftMaps daemon
+After=network.target
+
+[Service]
+Type=simple
+User=tudelft
+Group=tudelft
+ExecStart=/usr/bin/python server.py
+WorkingDirectory=/var/www/delftmaps
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=delftmaps
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
