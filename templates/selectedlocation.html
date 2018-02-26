@@ -1,0 +1,20 @@
+<template v-if="selectedExhibit">
+  <div class="wrapper">
+    <div class="left">
+      <div class="selected-location-title">[[ selectedExhibit.formatted_address ]]</div>
+      <br>
+      <div class="selected-location-body">[[ selectedExhibit.infoText ]]</div>
+    </div>
+
+    <div class="streetview-image">
+      <img v-bind:src="imageURL" width="100" height="100">
+    </div>
+    <div class="right">
+      <div class="selected-location-distance">
+        [[ selectedExhibit.distance.duration.text ]] lopen
+      <br>
+        [[ selectedExhibit.distance.distance.text ]]
+      </div>
+    </div>
+  </div>
+</template>

@@ -2,21 +2,23 @@ import json
 from flask import Flask, render_template, request
 import random
 import sys
+from datetime import datetime
+import exhibitiondata
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-	return render_template('index.html')
+	return render_template('index.html', exhibitions=exhibitiondata.exhibitions)
 
 @app.route('/js/<path:filename>')
 def serve_static(filename):
     root_dir = os.path.dirname(os.getcwd())
     return send_from_directory(os.path.join('.', 'static', 'js'), filename)
 
-@app.route('/delete_orders/<id>')
-def delete_orders(id):
-	return json.dumps(database.deleteOrders(id))
+@app.route('/locations')
+def delete_orders():
+	return json.dumps(exhibitiondata.exhibitions)
 
 @app.route('/getprices')
 def getPrices():
