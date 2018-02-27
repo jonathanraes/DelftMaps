@@ -1,19 +1,21 @@
 var sprintf = (str, ...argv) => !argv.length ? str :
     sprintf(str = str.replace(sprintf.token || "$", argv.shift()), ...argv)
-
+var mapCenter = {lat: 52.011, lng: 4.3593};
 var refreshIntervalId;
 var currentLocation;
 var locationMarker;
 var routeButton = '<button class="btn btn-primary" id="navbutton">Routebeschrijving</button>'
 var DestinationReachedDistance = 0.0001
 var openInMapsLinkBase = 'https://www.google.com/maps/search/?api=1&query=47.5951518,-122.3316393&query_place_id=ChIJKxjxuaNqkFQR3CK6O1HNNqY'
-var streetViewURL = 'https://maps.googleapis.com/maps/api/streetview?size=400x400&location=\$,\$&fov=90&heading=235&pitch=10&key=AIzaSyA7g2inijoh5NVHqaoKjE7dgpR6kRXI6Ls'
+var streetViewURL = 'https://maps.googleapis.com/maps/api/streetview?size=300x150&location=\$,\$&fov=110&heading=\$&pitch=10&key=AIzaSyA7g2inijoh5NVHqaoKjE7dgpR6kRXI6Ls'
 var vm = new Vue({
   el: "#app",
   delimiters: ['[[', ']]'],
   data: {
-    imageURL: 'https://maps.googleapis.com/maps/api/streetview?size=400x400&location=40.720032,-73.988354&fov=90&heading=235&pitch=10',
+    imageURL: '',
     map: null,
+    destination: null,
+    atDestination: false,
     directionsDisplay: null,
     directionsService: null,
     distanceService: null,
@@ -27,8 +29,8 @@ var vm = new Vue({
 
   },
   methods: {
-    navigate: function() {
-      console.error('navigate pressed!');
+    nextDestination: function() {
+      activateClosestExhibitDistanceMatrix();
     }
   },
   mounted() {
@@ -103,13 +105,11 @@ function initMap() {
   directionsDisplay = new google.maps.DirectionsRenderer();
   distanceService = new google.maps.DistanceMatrixService();
   map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 52.011, lng: 4.3593},
+    center: mapCenter,
     zoom: 16
   });
   directionsDisplay.setMap(map);
   addMapMarkers();
-
-  console.log(sprintf(streetViewURL, 1, 2))
 }
 
 function addMapMarkers() {
@@ -159,6 +159,7 @@ function calculateRoute(directionsService, end) {
 }
 
 function calculateAndDisplayRoute(directionsService, directionsDisplay, end) {
+  vm.atDestination = false;
   directionsService.route({
     origin: currentLocation,
     destination: end,
@@ -166,6 +167,7 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay, end) {
   }, function(response, status) {
     if (status === 'OK') {
       directionsDisplay.setDirections(response);
+      vm.destination = { lat: response.routes[0].legs[0].end_location.lat(), lng: response.routes[0].legs[0].end_location.lng() }
     } else {
       window.alert('Directions request failed due to ' + status);
     }
@@ -201,15 +203,17 @@ function updateLocation(centre) {
       }
       locationMarker.setPosition(currentLocation)
 
-      if (vm.selectedExhibit && getStraightDistance(vm.selectedExhibit.location, currentLocation) < DestinationReachedDistance) {
+      if (!vm.atDestination && vm.selectedExhibit && getStraightDistance(vm.destination, currentLocation) < DestinationReachedDistance) {
+        // Destination Reached
           console.log('reached destination ' + vm.exhibits.length);
           if (vm.exhibits.indexOf(vm.selectedExhibit) > -1) {
             vm.visited.push(vm.selectedExhibit);
             vm.exhibits.splice(vm.exhibits.indexOf(vm.selectedExhibit), 1);
           }
-          activateClosestExhibitDistanceMatrix();
           console.log('reached destination ' + vm.exhibits.length);
-
+          // activateClosestExhibitDistanceMatrix();
+          vm.atDestination = true;
+          reachedDestination(vm.selectedExhibit);
       }
       // if (vm.selectedExhibit)
       //   calculateRoute(directionsService, vm.selectedExhibit.location);
@@ -230,6 +234,14 @@ function updateLocation(centre) {
        handleLocationError(false, infoWindow, map.getCenter());
     }
   }
+}
+
+function reachedDestination(destination) {
+  var sub = { lat: destination.location.lat - currentLocation.lat, lng: destination.location.lng - currentLocation.lng };
+  // var sub = { lat: destination.location.lat - vm.destination.lat, lng: destination.location.lng - vm.destination.lng };
+  var angle = Math.atan2(sub.lng, sub.lat) * 180 / Math.PI
+  console.log('angle: ' + angle)
+  vm.imageURL = sprintf(streetViewURL, destination.location.lat, destination.location.lng, angle);
 }
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {

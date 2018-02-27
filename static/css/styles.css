@@ -3,17 +3,13 @@
 }
 .header {
   position: relative;
-  height: 100px;
+  height: 150px;
 }
 .logo {
   width: auto;
   padding: 10px;
   height: 100px;
 }
-/* #map {
-  height: 100%;
-  width: 100%;
-} */
 html, body {
   height: 100%;
   width: 100%;
@@ -33,11 +29,19 @@ h1 {
   position: relative;
   transform: translateY(+50%);
 }
+.destination-reached {
+  height: 150px;
+}
 
 /* Selected location bar at bottom */
 .wrapper {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
   width: 100%;
   overflow: hidden;
+  height: 100px;
 }
 .left {
   width: 80%;

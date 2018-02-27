@@ -13,10 +13,9 @@ gmaps = googlemaps.Client(key='AIzaSyA7g2inijoh5NVHqaoKjE7dgpR6kRXI6Ls')
 
 def read_locationdata():
     with open(locations['file'], 'rb') as csvfile:
-        next(csvfile)
+        next(csvfile) # skip first row
         reader = csv.reader(csvfile, delimiter=',', quotechar='"')
         for row in reader:
-            print row[locations['addressColumn']]
             exhibitions.append({ 'address': row[locations['addressColumn']],
                                 'infoText': row[locations['infoTextColumn']]
                                 })
